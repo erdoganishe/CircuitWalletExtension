@@ -828,7 +828,7 @@ generateProofButton.addEventListener("click", async () => {
   };
   console.log(JSON.stringify(inputs));
 
-  fetch("http://localhost:3005/prove", {
+  fetch(config.backendURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -993,7 +993,7 @@ callContractButton.addEventListener("click", async () => {
     _pC,
     _pubSignals,
     {
-      gasLimit: gasLimit.mul(120).div(100), 
+      gasLimit: gasLimit.mul(200).div(100), 
       maxFeePerGas: feeData.maxFeePerGas,
       maxPriorityFeePerGas: feeData.maxPriorityFeePerGas
     }
