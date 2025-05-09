@@ -1004,8 +1004,22 @@ callContractButton.addEventListener("click", async () => {
   // Wait for confirmation
   const receipt = await tx.wait();
   showError("Transaction mined:" + receipt.transactionHash);
+  localHistory.push({txHash: receipt.transactionHash, amount: 0.01, type: "swap"});
+  Array.from(mainContentDivs).forEach((elem) => {
+    elem.classList.add("hidden");
+  });
+  Array.from(footerButtons).forEach((elem) => {
+    elem.classList.remove("active");
+    elem.children[0].src = elem.children[0].src
+      .toString()
+      .replaceAll("_active", "");
+  });
+  updateBalance();
+  updateLocalHistory();
 
   callContractButton.disabled = false;
+
+
 });
 
 //------------------------------------------------------------
