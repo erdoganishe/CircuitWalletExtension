@@ -11,8 +11,11 @@
     <script src="lib/qrcode.min.js"></script>
 </head>
 <body>
-       <div id="openTabButton">
+    <div id="openTabButton">
         <img src = "../assets/newtab-24.png" id = "new-tab-img">
+    </div>
+      <div id = "changeLangButton">
+        <img src = "../assets/globe.png" id = "globe-img">
     </div>
     <div id="app-password">
         <input class = "password-input" id = "password" type = "password" placeholder="Password"></input>
@@ -41,7 +44,7 @@
             <input class="phrase-container row3 column4" type="text" readonly></input>
         </div>
         <div class="to-center-container">
-            <label class = "info-label">Make sure nobody is watching</label>
+            <label class = "info-label" id = "watching-label">Make sure nobody is watching</label>
             <button id = "reveal-button" class="action-button">Reveal mnemonnic phrase</button> 
             <button id = "phrase-copy-button" class="action-button">Copy to clipboard</button>
             <div>
@@ -68,7 +71,7 @@
             <input class="phrase-container row3 column4" type="text"></input>
         </div>
         <div class="to-center-container">
-            <label class = "info-label">Put missing words to phrase</label>
+            <label class = "info-label" id= "put-label">Put missing words to phrase</label>
             <button id = "confirm-button" class="action-button">Confirm</button> 
             <button class = "nav-button" id = "nav-button-previous3">Previous</button>
         </div>
@@ -78,5 +81,6 @@
     <script src = "keys.js" defer></script>
     <script src = "error.js" defer></script>
     <script src = "register.js" deref></script>
+    <script src = "localisation.js" deref></script>
 </body>
 </html>

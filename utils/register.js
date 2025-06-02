@@ -131,6 +131,74 @@ toRecoverButton.addEventListener("click", () => {
 //------------------------------------------------------------
 // Extension button
 document.getElementById("openTabButton").addEventListener("click", async () => {
-  const extensionURL = browser.runtime.getURL("utils/register.html"); 
+  const extensionURL = browser.runtime.getURL("utils/register.html");
   await browser.tabs.create({ url: extensionURL });
+});
+
+//------------------------------------------------------------
+// Localisation
+async function updateRegister() {
+  const lang = await getLang();
+
+  document.getElementById("password").placeholder = await getValueByKey(
+    "password",
+    lang
+  );
+  document.getElementById("confirm-password").placeholder = await getValueByKey(
+    "confirmPassword",
+    lang
+  );
+  document.getElementById("nav-button-next1").innerHTML = await getValueByKey(
+    "next",
+    lang
+  );
+  document.getElementById("nav-button-next2").innerHTML = await getValueByKey(
+    "next",
+    lang
+  );
+  document.getElementById("nav-button-previous2").innerHTML =
+    await getValueByKey("previous", lang);
+  document.getElementById("nav-button-previous3").innerHTML =
+    await getValueByKey("previous", lang);
+  document.getElementById("confirm-button").innerHTML = await getValueByKey(
+    "confirm",
+    lang
+  );
+  document.getElementById("put-label").innerHTML = await getValueByKey(
+    "putLabel",
+    lang
+  );
+  document.getElementById("watching-label").innerHTML = await getValueByKey(
+    "watchLabel",
+    lang
+  );
+  document.getElementById("reveal-button").innerHTML = await getValueByKey(
+    "revealMnemonic",
+    lang
+  );
+   document.getElementById("to-login-button").innerHTML = await getValueByKey(
+    "toLogin",
+    lang
+  ); 
+  document.getElementById("to-recover-button").innerHTML = await getValueByKey(
+    "toRecover",
+    lang
+  );
+  document.getElementById("phrase-copy-button").innerHTML = await getValueByKey(
+    "phraseCopied",
+    lang
+  );
+}
+
+const localisationButton = document.getElementById("changeLangButton");
+localisationButton.addEventListener("click", async () => {
+  
+  let lang = await getLang();
+  await nextLang(lang);
+
+  updateRegister();
+  // console.log(await getLang());
+});
+document.addEventListener("DOMContentLoaded", async () => {
+  updateRegister();
 });

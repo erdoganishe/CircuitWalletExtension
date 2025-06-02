@@ -13,11 +13,14 @@
     <div id="openTabButton">
         <img src = "../assets/newtab-24.png" id = "new-tab-img">
     </div>
+     <div id = "changeLangButton">
+        <img src = "../assets/globe.png" id = "globe-img">
+    </div>
     <div class="center-logo">
         <img src = "../assets/logo.png"> CircuitWallet
     </div>
     <div id="app-confirm-phrase">
-        <label class = "password-info">Put your mnemonic phrase: </label>
+        <label class = "password-info" id = "mnemonic-label">Put your mnemonic phrase: </label>
         <div class="grid-container">
             <input class="phrase-container row1 column1" value = "" type="text"></input>
             <input class="phrase-container row1 column2" value = "" type="text"></input>
@@ -35,9 +38,9 @@
             <input class="phrase-container row3 column4" value = "" type="text"></input>
         </div>
         <div class="password-container">
-            <label class = "password-info">New password</label>
+            <label class = "password-info" id = "new-password-label">New password</label>
             <input class = "password-input" id = "password" type = "password" placeholder="Password"></input>
-            <label class = "password-info">Confirm new password</label>
+            <label class = "password-info" id = "confirm-password-label">Confirm new password</label>
             <input class = "password-input" id = "confirm-password" type = "password" placeholder="Confirm password"></input>
             <button id = "confirm-new-password-button">Proceed</button>
             <button id = "to-login-button">To login</button>
@@ -51,5 +54,6 @@
     <script src = "keys.js"></script>
     <script src = "recover.js"></script>
     <script src = "error.js" defer></script>
+    <script src="localisation.js" deref></script>
 </body>
 </html>

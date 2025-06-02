@@ -93,8 +93,8 @@ const copyAddressButton = document.getElementById("copy-address-button");
 copyAddressButton.addEventListener("click", () => {
   navigator.clipboard
     .writeText(address)
-    .then(() => {
-      showError("Address copied to clipboard!");
+    .then(async () => {
+      showError(await getValueByKeyNoLang("addressCopied"));
     })
     .catch((err) => {
       console.error("Failed to copy text: ", err);
@@ -271,12 +271,12 @@ sendTxButton.addEventListener("click", async () => {
   const sendAmountInput = document.getElementById("send-amount-input");
 
   if (!sendAddressInput.value) {
-    showError("Put address!");
+    showError(await getValueByKeyNoLang("putAddressError"));
     sendTxButton.disabled = false;
     return;
   }
   if (!sendAmountInput.value) {
-    showError("Put value!");
+    showError(await getValueByKeyNoLang("putValueError"));
     sendTxButton.disabled = false;
     return;
   }
@@ -295,9 +295,9 @@ sendTxButton.addEventListener("click", async () => {
         document.getElementById("send-popup").classList.add("hidden");
         await updateBalance();
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.error("Transaction failed:", error);
-        showError("An error occurred while sending the transaction.");
+        showError(await getValueByKeyNoLang("txSendError"));
       })
       .finally(() => {
         sendTxButton.disabled = false;
@@ -326,7 +326,7 @@ deployContractButton.addEventListener("click", async () => {
       await updateBalance();
     });
   } catch {
-    showError("Something went wrong");
+    showError(await getValueByKeyNoLang("unexpectedError"));
     deployContractButton.disabled = false;
   }
 });
@@ -629,9 +629,10 @@ generateProofButton.addEventListener("click", async () => {
 
   //--------------------------------------
   // Fund contact to get it back later
-  const calldata = '["0x226952847ae340d55fd5c10dd4a4dd15245e14a9c13f1cec41f3d33d680d1f13", "0x1f408457d1782e69cddf684ea5804de2e4650cd8adb12a5f21672c391c7e7765"],[["0x195ca54fda280d612697bca4ece9ccad903dd49920d9d9facad8a825920f6921", "0x264b6a42c5df1271a5258266dcef6c175c2510a81e6b349413aefd43ac818efc"],["0x2a112ff066960ac64ff0f36b23c5ab091deaa02e692a6b8b694be3b467ee1a8e", "0x1b0f3105f6553d108e80962fdb59aae75d829094d7957e2765fd961f15af6966"]],["0x245be77a089c362010e435749495b441dbb152b8cc64710090e8f3c5757b4183", "0x1bf05eebd84b8ed833cd8adcd5f906341ee26625679697cca54aaaa33ce6cf30"],["0x02fa1595684d9c4d2492b046a74237088bfdf9d2e74c7c363ba1ba13aba57336","0x0768a8ff526a23df7009692694a48ae687fa78e77369edb48103518ce809672a"]'
+  const calldata =
+    '["0x226952847ae340d55fd5c10dd4a4dd15245e14a9c13f1cec41f3d33d680d1f13", "0x1f408457d1782e69cddf684ea5804de2e4650cd8adb12a5f21672c391c7e7765"],[["0x195ca54fda280d612697bca4ece9ccad903dd49920d9d9facad8a825920f6921", "0x264b6a42c5df1271a5258266dcef6c175c2510a81e6b349413aefd43ac818efc"],["0x2a112ff066960ac64ff0f36b23c5ab091deaa02e692a6b8b694be3b467ee1a8e", "0x1b0f3105f6553d108e80962fdb59aae75d829094d7957e2765fd961f15af6966"]],["0x245be77a089c362010e435749495b441dbb152b8cc64710090e8f3c5757b4183", "0x1bf05eebd84b8ed833cd8adcd5f906341ee26625679697cca54aaaa33ce6cf30"],["0x02fa1595684d9c4d2492b046a74237088bfdf9d2e74c7c363ba1ba13aba57336","0x0768a8ff526a23df7009692694a48ae687fa78e77369edb48103518ce809672a"]';
   const contractAddress = "0x59Bc776565ebC5d438A0BC16cD0B4443A79976f6";
-  
+
   const secret = BigInt("0x" + getRandom254BitHex());
   const nullifier = BigInt("0x" + getRandom254BitHex());
 
@@ -758,27 +759,26 @@ generateProofButton.addEventListener("click", async () => {
 
   const REWARD_AMOUNT = ethers.utils.parseEther("0.01"); // 10^16 wei = 0.01 ETH
   const feeData = await provider.getFeeData();
-  
-  const gasEstimate = await contract.estimateGas.deposit(secret, { 
-    value: REWARD_AMOUNT 
+
+  const gasEstimate = await contract.estimateGas.deposit(secret, {
+    value: REWARD_AMOUNT,
   });
-  const gasLimit = gasEstimate.mul(120).div(100); 
+  const gasLimit = gasEstimate.mul(120).div(100);
 
   try {
     const tx = await contract.deposit(secret, {
       value: REWARD_AMOUNT,
       gasLimit,
       maxFeePerGas: feeData.maxFeePerGas,
-      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas
+      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
     });
     console.log(tx);
 
     const receipt = await tx.wait();
-    showError("Transaction mined: " + receipt.transactionHash)
-  } catch(e) {
+    showError((await getValueByKeyNoLang("txMined")) + receipt.transactionHash);
+  } catch (e) {
     console.log(e);
   }
-
 
   //--------------------------------------
   // Generate ZK proof for this fundation
@@ -843,7 +843,6 @@ generateProofButton.addEventListener("click", async () => {
       console.error("Error:", error);
     });
   generateProofButton.disabled = false;
-
 });
 
 callContractButton.addEventListener("click", async () => {
@@ -974,37 +973,39 @@ callContractButton.addEventListener("click", async () => {
   ];
   const contract = new ethers.Contract(contractAddress, abi, signer);
 
-  const params = JSON.parse(`{"a":[${calldata}]}`).a
+  const params = JSON.parse(`{"a":[${calldata}]}`).a;
   const _pA = params[0];
   const _pB = params[1];
   const _pC = params[2];
   const _pubSignals = params[3];
 
-  const gasLimit = await contract.estimateGas.verifyAndReward(_pA, _pB, _pC, _pubSignals);
+  const gasLimit = await contract.estimateGas.verifyAndReward(
+    _pA,
+    _pB,
+    _pC,
+    _pubSignals
+  );
   console.log(gasLimit);
   const feeData = await provider.getFeeData();
   console.log(feeData);
   console.log(_pA, _pB, _pC, _pubSignals);
 
-
-  const tx = await contract.verifyAndReward(
-    _pA,
-    _pB,
-    _pC,
-    _pubSignals,
-    {
-      gasLimit: gasLimit.mul(200).div(100), 
-      maxFeePerGas: feeData.maxFeePerGas,
-      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas
-    }
-  );
+  const tx = await contract.verifyAndReward(_pA, _pB, _pC, _pubSignals, {
+    gasLimit: gasLimit.mul(200).div(100),
+    maxFeePerGas: feeData.maxFeePerGas,
+    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+  });
 
   console.log(tx);
-  
+
   // Wait for confirmation
   const receipt = await tx.wait();
-  showError("Transaction mined:" + receipt.transactionHash);
-  localHistory.push({txHash: receipt.transactionHash, amount: 0.01, type: "swap"});
+  showError((await getValueByKeyNoLang("txMined")) + receipt.transactionHash);
+  localHistory.push({
+    txHash: receipt.transactionHash,
+    amount: 0.01,
+    type: "swap",
+  });
   Array.from(mainContentDivs).forEach((elem) => {
     elem.classList.add("hidden");
   });
@@ -1018,8 +1019,6 @@ callContractButton.addEventListener("click", async () => {
   updateLocalHistory();
 
   callContractButton.disabled = false;
-
-
 });
 
 //------------------------------------------------------------
@@ -1038,9 +1037,9 @@ logOutButton.addEventListener("click", async () => {
 });
 
 const copyPrivKeyButton = document.getElementById("copy-private-key");
-copyPrivKeyButton.addEventListener("click", () => {
+copyPrivKeyButton.addEventListener("click", async () => {
   navigator.clipboard.writeText(privateKey);
-  showError("Private key copied to clipboard!");
+  showError(await getValueByKeyNoLang("pkCopyPopup"));
 });
 
 //------------------------------------------------------------
@@ -1048,4 +1047,82 @@ copyPrivKeyButton.addEventListener("click", () => {
 document.getElementById("openTabButton").addEventListener("click", async () => {
   const extensionURL = browser.runtime.getURL("utils/home.html");
   await browser.tabs.create({ url: extensionURL });
+});
+
+//------------------------------------------------------------
+// Localisation
+
+async function updateHome() {
+  const lang = await getLang();
+
+  document.getElementById("send-tx-button").innerHTML = await getValueByKey(
+    "send",
+    lang
+  );
+  document.getElementById("swap-token-button").innerHTML = await getValueByKey(
+    "swap",
+    lang
+  );
+  document.getElementById("copy-private-key").innerHTML = await getValueByKey(
+    "copyPK",
+    lang
+  );
+  document.getElementById("pk-warning-label").innerHTML = await getValueByKey(
+    "warningPK",
+    lang
+  );
+  document.getElementById("logout-button").innerHTML = await getValueByKey(
+    "logOut",
+    lang
+  );
+  document.getElementById("graph-button1").innerHTML = await getValueByKey(
+    "oneDay",
+    lang
+  );
+  document.getElementById("graph-button7").innerHTML = await getValueByKey(
+    "oneWeek",
+    lang
+  );
+  document.getElementById("graph-button30").innerHTML = await getValueByKey(
+    "oneMonth",
+    lang
+  );
+  document.getElementById("graph-button365").innerHTML = await getValueByKey(
+    "oneYear",
+    lang
+  );
+  document.getElementById("generate-proof-button").innerHTML =
+    await getValueByKey("createProof", lang);
+  document.getElementById("calldata-input").placeholder = await getValueByKey(
+    "calldata",
+    lang
+  );
+
+  document.getElementById("swap-amount-input").placeholder =
+    await getValueByKey("amount", lang);
+
+  document.getElementById("send-address-input").placeholder =
+    await getValueByKey("recepientAddress", lang);
+
+  document.getElementById("contract-bytecode-input").innerHTML =
+    await getValueByKey("deployContrant", lang);
+
+  document.getElementById("contract-bytecode-input").placeholder =
+    await getValueByKey("bytecode", lang);
+  document.getElementById("send-amount-input").placeholder =
+    await getValueByKey("amount", lang);
+  document.getElementById("call-contract-button").innerHTML =
+    await getValueByKey("callContract", lang);
+}
+
+const localisationButton = document.getElementById("changeLangButton");
+localisationButton.addEventListener("click", async () => {
+  let lang = await getLang();
+  await nextLang(lang);
+
+  updateHome();
+  // console.log(await getLang());
+});
+document.addEventListener("DOMContentLoaded", async () => {
+  updateHome();
 });

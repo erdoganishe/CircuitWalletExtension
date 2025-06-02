@@ -33,6 +33,16 @@ async function getPassword(){
     return result.userPassword;
 }
 
+async function saveLang(lang){
+    await browser.storage.local.set({ lang: lang });
+}
+
+async function getLang(){
+    const result = await browser.storage.local.get("lang");
+
+    return result.lang;
+}
+
 async function checkForStoredData(){
     const result = await browser.storage.local.get("passwordHash");
     console.log(result);

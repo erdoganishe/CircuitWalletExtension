@@ -79,3 +79,50 @@ document.getElementById("openTabButton").addEventListener("click", async () => {
   const extensionURL = browser.runtime.getURL("./utils/recover.html");
   await browser.tabs.create({ url: extensionURL });
 });
+
+//------------------------------------------------------------
+// Localisation
+async function updateRecover() {
+  const lang = await getLang();
+  document.getElementById("mnemonic-label").innerHTML = await getValueByKey(
+    "putMnemonic",
+    lang
+  );
+
+  document.getElementById("to-login-button").innerHTML = await getValueByKey(
+    "toLogin",
+    lang
+  );
+  document.getElementById("to-register-button").innerHTML = await getValueByKey(
+    "toRegister",
+    lang
+  );
+  document.getElementById("password").placeholder = await getValueByKey(
+    "password",
+    lang
+  );
+  document.getElementById("new-password-label").innerHTML = await getValueByKey(
+    "newPassword",
+    lang
+  );
+  document.getElementById("confirm-password").placeholder = await getValueByKey(
+    "confirmPassword",
+    lang
+  );
+  document.getElementById("confirm-password-label").innerHTML =
+    await getValueByKey("confirmPasswordLabel", lang);
+  document.getElementById("confirm-new-password-button").innerHTML =
+    await getValueByKey("proceed", lang);
+}
+
+const localisationButton = document.getElementById("changeLangButton");
+localisationButton.addEventListener("click", async () => {
+  let lang = await getLang();
+  await nextLang(lang);
+
+  updateRecover();
+  // console.log(await getLang());
+});
+document.addEventListener("DOMContentLoaded", async () => {
+  updateRecover();
+});

@@ -16,6 +16,9 @@
     <div id="openTabButton">
         <img src = "../assets/newtab-24.png" id = "new-tab-img">
     </div>
+    <div id = "changeLangButton">
+        <img src = "../assets/globe.png" id = "globe-img">
+    </div>
     <div class="center-logo">
         <img src = "../assets/logo.png"> CircuitWallet
     </div>
@@ -149,7 +152,7 @@
         </div>
         <div id = "settings-container" class = "main-content-div hidden">
             <button id="copy-private-key">Copy private key</button>
-            <label class="info-label">Don`t give private key to anyone! Anyone with private key get access to all account funds!</label>
+            <label class="info-label" id = "pk-warning-label">Don`t give private key to anyone! Anyone with private key get access to all account funds!</label>
                 
             <button id="logout-button">Log out</button>
             
@@ -178,5 +181,6 @@
     <script src="swapSepoliaEthForTokens.js" deref></script>
     <script src="cypher.js" deref></script>
     <script src="home.js" deref></script>
+    <script src="localisation.js" deref></script>
   </body>
 </html>

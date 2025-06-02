@@ -20,9 +20,6 @@
     {
       "matches": [
         "*://*.mozilla.org/*"
-      ],
-      "js": [
-        "wallet.js"
       ]
     }
   ],
