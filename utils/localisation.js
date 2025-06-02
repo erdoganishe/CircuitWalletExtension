@@ -175,7 +175,7 @@ const localisation = {
     calldata: "Calldata...",
     callContract: "Vertrag aufrufen",
     copyPK: "Privaten Schlüssel kopieren",
-    warningPK: "Geben Sie den privaten Schlüssel niemandem weiter! Jeder mit dem privaten Schlüssel hat Zugriff auf alle Kontofonds!",
+    warningPK: "Geben Sie den privaten Schlüssel niemandem weiter! Jeder, der einen privaten Schlüssel hat, kann auf das gesamte Guthaben auf Ihrem Konto zugreifen",
     logOut: "Abmelden",
     putMnemonic: "Geben Sie Ihre mnemonische Phrase ein: ",
     newPassword: "Neues Passwort",
