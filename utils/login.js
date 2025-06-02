@@ -8,7 +8,7 @@ loginButton.addEventListener("click", async () => {
   const password = input.value;
   console.log(CryptoJS.SHA256(password).toString());
   await getValueFromLocalStorage("passwordHash", password).then(
-    (passwordHash) => {
+    async (passwordHash) => {
       if (CryptoJS.SHA256(password).toString() == passwordHash) {
         console.log("password pass!");
         try {
@@ -18,7 +18,7 @@ loginButton.addEventListener("click", async () => {
           console.log("Some error: ", e);
         }
       } else {
-        showError("Wrong Password!");
+        showError(await getValueByKeyNoLang("wrongPassword"));
       }
     }
   );

@@ -7,7 +7,7 @@ const passwordInputs = document.getElementsByClassName("password-input");
 const phraseInputs = document.getElementsByClassName("phrase-container");
 console.log(phraseInputs.length);
 const firstButtonNext = document.getElementById("nav-button-next1");
-firstButtonNext.addEventListener("click", () => {
+firstButtonNext.addEventListener("click", async () => {
   if (
     passwordInputs[0].value &&
     passwordInputs[1].value &&
@@ -19,15 +19,15 @@ firstButtonNext.addEventListener("click", () => {
     processKeys(isFirst);
   } else {
     if (!passwordInputs[0].value) {
-      showError("Provide password!");
+      showError(await getValueByKeyNoLang("providePasswordError"));
       return;
     }
     if (!passwordInputs[1].value) {
-      showError("Provide password confirmation!");
+      showError(await getValueByKeyNoLang("provideConfirmPasswordError"));
       return;
     }
     if (passwordInputs[0].value != passwordInputs[1].value) {
-      showError("Passwords don`t match!");
+      showError(await getValueByKeyNoLang("passwordMismatch"));
       return;
     }
   }
@@ -87,7 +87,7 @@ confirmButton.addEventListener("click", async () => {
 
     window.location.href = "home.html";
   } else {
-    showError("Wrong phrase!");
+    showError(await getValueByKeyNoLang("wrongPhrase"));
   }
 });
 
@@ -176,10 +176,10 @@ async function updateRegister() {
     "revealMnemonic",
     lang
   );
-   document.getElementById("to-login-button").innerHTML = await getValueByKey(
+  document.getElementById("to-login-button").innerHTML = await getValueByKey(
     "toLogin",
     lang
-  ); 
+  );
   document.getElementById("to-recover-button").innerHTML = await getValueByKey(
     "toRecover",
     lang
@@ -192,7 +192,6 @@ async function updateRegister() {
 
 const localisationButton = document.getElementById("changeLangButton");
 localisationButton.addEventListener("click", async () => {
-  
   let lang = await getLang();
   await nextLang(lang);
 
