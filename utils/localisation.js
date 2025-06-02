@@ -192,7 +192,7 @@ const localisation = {
     toRegister: "Registrieren",
     toLogin: "Anmelden",
     providePasswordError: "Passwort angeben!",
-    provideConfirmPasswordError: "Passwortbestätigung angeben!",
+    provideConfirmPasswordError: "Geben Sie Ihr Passwort zur Bestätigung ein!",
     txMined: "Transaktion bestätigt: ",
     addressCopied: "Adresse in Zwischenablage kopiert!",
     putAddressError: "Adresse eingeben!",
