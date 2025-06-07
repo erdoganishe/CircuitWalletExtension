@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CircuitWallet",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Crypto wallet for Etherium blockchain",
   "icons": {
     "48": "assets/48.png"
